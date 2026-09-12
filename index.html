@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>منصتي التعليمية</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">منصتي</div>
+  <nav>
+    <a href="#home">الرئيسية</a>
+    <a href="#courses">الكورسات</a>
+    <a href="#teachers">المدرسين</a>
+    <a href="#tests">الاختبارات</a>
+  </nav>
+  <button class="login" onclick="openLogin()">تسجيل الدخول</button>
+</header>
+
+<main>
+<section id="home" class="hero">
+  <div class="hero-text">
+    <span class="badge">منصة تعليمية للمرحلة الثانوية</span>
+    <h1>ذاكر صح، <span>وخلّي مذاكرتك أبسط</span></h1>
+    <p>كورسات، فيديوهات، اختبارات ومتابعة لتقدمك في مكان واحد.</p>
+    <div class="actions">
+      <button class="primary" onclick="scrollToId('courses')">ابدأ المذاكرة</button>
+      <button class="secondary" onclick="openLogin()">إنشاء حساب</button>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="mini-title">لوحة الطالب</div>
+    <div class="progress-row"><b>التقدم الأسبوعي</b><b>72%</b></div>
+    <div class="progress"><i style="width:72%"></i></div>
+    <div class="stats">
+      <div><strong>12</strong><small>درس مكتمل</small></div>
+      <div><strong>4</strong><small>اختبارات</small></div>
+      <div><strong>860</strong><small>نقطة</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>اختار مرحلتك</h2>
+  <div class="grades">
+    <button onclick="filterCourses('1')">أولى ثانوي</button>
+    <button onclick="filterCourses('2')">تانية ثانوي</button>
+    <button onclick="filterCourses('3')">تالتة ثانوي</button>
+  </div>
+</section>
+
+<section id="courses" class="section">
+  <div class="section-head"><h2>الكورسات</h2><span id="filterLabel">كل المواد</span></div>
+  <div id="courseGrid" class="grid"></div>
+</section>
+
+<section id="teachers" class="section">
+  <h2>مدرسين مميزين</h2>
+  <div class="teachers">
+    <div class="teacher"><div class="avatar">أ</div><b>أحمد علي</b><span>اللغة العربية</span></div>
+    <div class="teacher"><div class="avatar">م</div><b>محمد حسن</b><span>الرياضيات</span></div>
+    <div class="teacher"><div class="avatar">س</div><b>سارة محمود</b><span>اللغة الإنجليزية</span></div>
+    <div class="teacher"><div class="avatar">ع</div><b>عمر خالد</b><span>الفيزياء</span></div>
+  </div>
+</section>
+
+<section id="tests" class="section test-section">
+  <h2>اختبر نفسك</h2>
+  <p>جاوب على سؤال سريع وشوف نتيجتك.</p>
+  <div class="quiz" id="quiz">
+    <h3 id="question"></h3>
+    <div id="answers"></div>
+    <button class="primary" id="nextBtn" onclick="nextQuestion()">السؤال التالي</button>
+    <div id="score"></div>
+  </div>
+</section>
+</main>
+
+<footer>© 2026 منصتي التعليمية — نموذج تجريبي</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="close" onclick="closeLogin()">×</button>
+    <h2>تسجيل الدخول</h2>
+    <input id="name" placeholder="الاسم">
+    <input id="email" type="email" placeholder="البريد الإلكتروني">
+    <button class="primary" onclick="login()">دخول</button>
+    <p id="welcome"></p>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
