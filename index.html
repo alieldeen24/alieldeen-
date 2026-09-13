@@ -44,9 +44,9 @@
 <section class="section">
   <h2>اختار مرحلتك</h2>
   <div class="grades">
-    <button onclick="filterCourses('1')">أولى ثانوي</button>
-    <button onclick="filterCourses('2')">تانية ثانوي</button>
-    <button onclick="filterCourses('3')">تالتة ثانوي</button>
+    <button onclick="filterCourses('1'); scrollToId('courses')">أولى ثانوي</button>
+    <button onclick="filterCourses('2'); scrollToId('courses')">تانية ثانوي</button>
+    <button onclick="filterCourses('3'); scrollToId('courses')">تالتة ثانوي</button>
   </div>
 </section>
 
@@ -58,10 +58,10 @@
 <section id="teachers" class="section">
   <h2>مدرسين مميزين</h2>
   <div class="teachers">
-    <div class="teacher"><div class="avatar">أ</div><b>علي الدين جلال</b><span>اللغة العربية</span></div>
-    <div class="teacher"><div class="avatar">م</div><b>عزت رامي</b><span>الرياضيات</span></div>
-    <div class="teacher"><div class="avatar">س</div><b>عبدالرحمن عصام</b><span>اللغة الإنجليزية</span></div>
-    <div class="teacher"><div class="avatar">ع</div><b>كريم أحمد </b><span>الفيزياء</span></div>
+    <div class="teacher"><div class="avatar">ع</div><b>علي الدين جلال</b><span>اللغة العربية</span></div>
+    <div class="teacher"><div class="avatar">ع</div><b>عزت رامي</b><span>الرياضيات</span></div>
+    <div class="teacher"><div class="avatar">س</div><b>عبد الرحمن عصام</b><span>اللغة الإنجليزية</span></div>
+    <div class="teacher"><div class="avatar">ع</div><b>كريم أحمد</b><span>الفيزياء</span></div>
   </div>
 </section>
 
@@ -89,6 +89,15 @@
     <p id="welcome"></p>
   </div>
 </div>
+
+<script>
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
 <script src="script.js"></script>
 </body>
 </html>
