@@ -67,11 +67,10 @@
 
 <section id="tests" class="section test-section">
   <h2>اختبر نفسك</h2>
-  <p>جاوب على سؤال سريع وشوف نتيجتك.</p>
+  <p>جاوب على الأسئلة الخمسة وشوف نتيجتك.</p>
   <div class="quiz" id="quiz">
     <h3 id="question"></h3>
     <div id="answers"></div>
-    <button class="primary" id="nextBtn" onclick="nextQuestion()">السؤال التالي</button>
     <div id="score"></div>
   </div>
 </section>
@@ -93,11 +92,163 @@
 <script>
   function scrollToId(id) {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function openLogin() {
+    const modal = document.getElementById("modal");
+    if (modal) modal.style.display = "flex";
+  }
+
+  function closeLogin() {
+    const modal = document.getElementById("modal");
+    if (modal) modal.style.display = "none";
+  }
+
+  function login() {
+    const name = document.getElementById("name").value;
+    if (name) {
+      document.getElementById("welcome").innerText = `أهلاً بك يا ${name}!`;
+      setTimeout(closeLogin, 1000);
     }
   }
+
+  function filterCourses(grade) {
+    const filterLabel = document.getElementById("filterLabel");
+    if (filterLabel) filterLabel.innerText = `صفوف الصف ${grade} ثانوي`;
+  }
+
+  const questions = [
+    {
+      id: 1,
+      type: "text",
+      question: "ليه علي الدين عمل جروب النيجاز؟"
+    },
+    {
+      id: 2,
+      type: "choice",
+      question: "علي الدين هيجيب كام في 2 بكالوريا؟",
+      answers: ["92%", "95%", "98%", "100%"]
+    },
+    {
+      id: 3,
+      type: "choice",
+      question: "هيجيب كام في 3 بكالوريا؟",
+      answers: ["91%", "94%", "97%", "100%"]
+    },
+    {
+      id: 4,
+      type: "choice",
+      question: "أكثر مادة يتفوق فيها علي الدين؟",
+      answers: ["البرمجة والتكنولوجيا", "الرياضيات", "اللغات", "العلوم الإنسانية"]
+    },
+    {
+      id: 5,
+      type: "choice",
+      question: "ما هي الكلية المتوقعة لعلي الدين؟",
+      answers: ["حاسبات ومعلومات", "هندسة برمجيات", "ذكاء اصطناعي", "كلية العلوم"]
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let userResponses = {};
+
+  function renderQuestion() {
+    const qContainer = document.getElementById("question");
+    const aContainer = document.getElementById("answers");
+    const scoreDiv = document.getElementById("score");
+
+    if (!qContainer || !aContainer) return;
+
+    scoreDiv.innerHTML = "";
+    aContainer.innerHTML = "";
+
+    if (currentQuestionIndex >= questions.length) {
+      showResults();
+      return;
+    }
+
+    const q = questions[currentQuestionIndex];
+    qContainer.innerText = `السؤال (${currentQuestionIndex + 1}/${questions.length}): ${q.question}`;
+
+    if (q.type === "text") {
+      const textarea = document.createElement("textarea");
+      textarea.placeholder = "اكتب إجابتك المقالية هنا...";
+      textarea.rows = 3;
+      textarea.style.cssText = "width:90%; padding:10px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px; font-family:inherit;";
+      
+      const submitBtn = document.createElement("button");
+      submitBtn.className = "primary";
+      submitBtn.innerText = "حفظ الإجابة والمتابعة";
+      submitBtn.onclick = function() {
+        const val = textarea.value.trim();
+        if (!val) {
+          alert("يرجى كتابة الإجابة أولاً!");
+          return;
+        }
+        userResponses[q.question] = val;
+        saveEssayToLocal(val);
+        currentQuestionIndex++;
+        renderQuestion();
+      };
+
+      aContainer.appendChild(textarea);
+      aContainer.appendChild(document.createElement("br"));
+      aContainer.appendChild(submitBtn);
+    } else {
+      q.answers.forEach(ans => {
+        const btn = document.createElement("button");
+        btn.className = "secondary";
+        btn.style.cssText = "margin: 5px; padding: 10px 15px; cursor: pointer;";
+        btn.innerText = ans;
+        btn.onclick = function() {
+          userResponses[q.question] = ans;
+          currentQuestionIndex++;
+          renderQuestion();
+        };
+        aContainer.appendChild(btn);
+      });
+    }
+  }
+
+  function saveEssayToLocal(answer) {
+    let saved = JSON.parse(localStorage.getItem("nigaz_essays") || "[]");
+    saved.push({ date: new Date().toLocaleString("ar-EG"), text: answer });
+    localStorage.setItem("nigaz_essays", JSON.stringify(saved));
+  }
+
+  function showResults() {
+    const qContainer = document.getElementById("question");
+    const aContainer = document.getElementById("answers");
+    const scoreDiv = document.getElementById("score");
+
+    qContainer.innerText = "تمت الإجابة على جميع الأسئلة!";
+    aContainer.innerHTML = "";
+
+    let summaryHTML = "<div style='text-align:right; margin-top:15px;'><h4>ملخص إجاباتك:</h4><ul style='list-style:none; padding:0;'>";
+    for (let q in userResponses) {
+      summaryHTML += `<li style='margin-bottom:8px;'><b>${q}</b>: <span style='color:#2563eb;'>${userResponses[q]}</span></li>`;
+    }
+    summaryHTML += "</ul></div>";
+
+    const whatsappMessage = encodeURIComponent(`إجابات الاختبار:\n` + Object.entries(userResponses).map(([k,v]) => `${k}: ${v}`).join("\n"));
+    summaryHTML += `<a href="https://wa.me/?text=${whatsappMessage}" target="_blank" class="primary" style="display:inline-block; padding:10px 15px; background:#25D366; color:#fff; text-decoration:none; border-radius:6px; margin-top:10px;">إرسال الإجابات لعلي الدين عبر WhatsApp</a>`;
+
+    let savedEssays = JSON.parse(localStorage.getItem("nigaz_essays") || "[]");
+    if (savedEssays.length > 0) {
+      summaryHTML += "<hr style='margin:15px 0;'><div style='text-align:right;'><h4>الإجابات المقالية المحفوظة في الجهاز:</h4><ul>";
+      savedEssays.forEach(e => {
+        summaryHTML += `<li><small style='color:#666;'>(${e.date})</small>: ${e.text}</li>`;
+      });
+      summaryHTML += "</ul></div>";
+    }
+
+    scoreDiv.innerHTML = summaryHTML;
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    renderQuestion();
+  });
 </script>
-<script src="script.js"></script>
 </body>
 </html>
